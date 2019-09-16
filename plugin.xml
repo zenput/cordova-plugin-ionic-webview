@@ -37,6 +37,7 @@
       <clobbers target="Ionic.WebView"/>
   </js-module>
 
+  <!-- @custom:zenput @jira:ZP-979 removing this plugin integration for Android
   <platform name="android">
     <config-file target="config.xml" parent="/*">
       <allow-navigation href="http://localhost/*"/>
@@ -54,7 +55,7 @@
     <source-file src="src/android/com/ionicframework/cordova/webview/WebViewLocalServer.java" target-dir="src/com/ionicframework/cordova/webview"/>
     <preference name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" default="27.+"/>
     <framework src="com.android.support:support-annotations:$ANDROID_SUPPORT_ANNOTATIONS_VERSION"/>
-  </platform>
+  </platform> -->
 
   <!-- ios -->
   <platform name="ios">
