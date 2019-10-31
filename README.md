@@ -76,6 +76,21 @@ On iOS 11 and newer it will use a `WKURLSchemeHandler` that loads the app from `
 
 On iOS 10 and older will continue using the local web server even if the preference is set to `true`.
 
+#### iosScheme
+
+```xml
+<preference name="iosScheme" value="httpsionic" />
+```
+
+Default value is `ionic`
+
+Configures the Scheme the app uses to load the content.
+
+Values like `http`, `https` or `file` are not valid and will use default value instead.
+
+If you change it, you'll need to add a new `allow-navigation` entry in the `config.xml` for the configured scheme (i.e `<allow-navigation href="httpsionic://*"/>` if `iosScheme` is set to `httpsionic`).
+
+
 #### HostName
 
 `<preference name="HostName" value="myHostName" />`

@@ -7,13 +7,22 @@
     self.basePath = assetPath;
 }
 
+- (instancetype)initWithBasePath:(NSString *)basePath andScheme:(NSString *)scheme {
+    self = [super init];
+    if (self) {
+        _basePath = basePath;
+        _scheme = scheme;
+    }
+    return self;
+}
+
 - (void)webView:(WKWebView *)webView startURLSchemeTask:(id <WKURLSchemeTask>)urlSchemeTask
 API_AVAILABLE(ios(11.0)){
     NSString * startPath = @"";
     NSURL * url = urlSchemeTask.request.URL;
     NSString * stringToLoad = url.path;
     NSString * scheme = url.scheme;
-    if ([scheme isEqualToString:@"ionic"]) {
+    if ([scheme isEqualToString:self.scheme]) {
         if ([stringToLoad hasPrefix:@"/_app_file_"]) {
             startPath = [stringToLoad stringByReplacingOccurrencesOfString:@"/_app_file_" withString:@""];
         } else {

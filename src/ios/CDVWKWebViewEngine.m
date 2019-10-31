@@ -208,7 +208,8 @@ NSTimer *timer;
     int portNumber = [settings cordovaFloatSettingForKey:@"WKPort" defaultValue:8080];
 
     //set the local server name
-    self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"http://%@:%d", bind, portNumber];
+    NSString *scheme = [self getSchemeFromSettings];
+    self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"%@://%@", scheme, bind];
 }
 
 -(void)startServer
@@ -282,6 +283,21 @@ NSTimer *timer;
     return configuration;
 }
 
+- (NSString*)getSchemeFromSettings
+{
+    if (self.useScheme == NO) {
+        return @"ionic";
+    }
+
+    NSDictionary* settings = self.commandDelegate.settings;
+    NSString *scheme = [settings cordovaSettingForKey:@"iosScheme"];
+    if (scheme == nil || [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]  || [scheme isEqualToString:@"file"]){
+        return @"ionic";
+    }
+
+    return scheme;
+}
+
 - (void)pluginInitialize
 {
     // viewController would be available now. we attempt to set all possible delegates to it, by default
@@ -298,7 +314,8 @@ NSTimer *timer;
         if(bind == nil){
             bind = @"app";
         }
-        self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"ionic://%@", bind];
+        NSString *scheme = [self getSchemeFromSettings];
+        self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"%@://%@", scheme, bind];
     } else {
         [self initWebServer];
     }
@@ -344,9 +361,9 @@ NSTimer *timer;
 
     if (@available(iOS 11.0, *)) {
         if (self.useScheme) {
-            self.handler = [[IONAssetHandler alloc] init];
-            [self.handler setAssetPath:[self getStartPath]];
-            [configuration setURLSchemeHandler:self.handler forURLScheme:@"ionic"];
+            NSString *scheme = [self getSchemeFromSettings];
+            self.handler = [[IONAssetHandler alloc] initWithBasePath:[self getStartPath] andScheme:scheme];
+            [configuration setURLSchemeHandler:self.handler forURLScheme:scheme];
         }
     }
 
